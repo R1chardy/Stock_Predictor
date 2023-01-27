@@ -1,11 +1,11 @@
 import requests
-import YahooScraper
+import YahooNewsScraper
 from bs4 import BeautifulSoup
 
 def crawl(url):
     try:
         response = requests.get(url)
-        time, data = YahooScraper.scrape(url)
+        time, data = YahooNewsScraper.scrape(url)
         if(len(data.strip()) == 0):
             return []
         print(url)
