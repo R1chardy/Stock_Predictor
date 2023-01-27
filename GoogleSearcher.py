@@ -1,11 +1,11 @@
 from googlesearch import search
 from bs4 import BeautifulSoup
 import requests
-import YahooScraper
+import json
 
-query = "site:news.yahoo.com tesla"
-links = search(query, tld="co.in", num=10, stop=10, pause=2)
-
-for link in links:
-    date, title, data = YahooScraper.scrape(link)
-    print(link + '\n' + title + '\n' + date + '\n' + data + '\n')
+def find(query, nums, domainName):
+    links = search(query, tld="com", num=nums, stop=nums, pause=5)
+    file = open(domainName + "Links.json", "w")
+    jsonString = json.dumps([link for link in links])
+    file.write(jsonString)
+    file.close()
