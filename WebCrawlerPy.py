@@ -1,5 +1,5 @@
 import requests
-import YahooNewsScraper
+import siteScrapers.YahooNewsScraper as YahooNewsScraper
 from bs4 import BeautifulSoup
 
 def crawl(url):

@@ -1,7 +1,9 @@
-import YahooNewsScraper
-import YahooFinanceScraper
+import siteScrapers.YahooNewsScraper as YahooNewsScraper
+import siteScrapers.YahooFinanceScraper as YahooFinanceScraper
 import GoogleSearcher
 import json
+from pathlib import Path
+from StockCSV import getCSV
 
 stocks = ["tesla", "apple", "microsoft", "NVIDIA", "zoom", "blizzard", "google", "iqiyi", "cadence", "qualcomm", "uber"]
 
@@ -37,7 +39,16 @@ def scrapeYahooFinance():
             print(data)
             print()
 
+def downloadStockData(stock_list):
+    for stock in stock_list:
+        path = Path(f'./stockHistoricalData/{stock}.csv')
+        if not path.is_file():
+            fout = open(f'./stockHistoricalData/{stock}.csv', 'w')
+            csv_data = getCSV(stock, 1514793600, 1641024000)
+            fout.write(csv_data)
+            fout.close()
+
 
 if __name__ == "__main__":
     # scrapeYahooNews()
-    scrapeYahooFinance()
+    downloadStockData(['AAPL', 'TSLA'])
