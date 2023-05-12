@@ -1,4 +1,3 @@
-import siteScrapers.YahooNewsScraper as YahooNewsScraper
 from googlesearch import search
 import json
 from datetime import datetime
@@ -10,8 +9,9 @@ stocks: an array of strings of stocks
 sites: an array of strings of sites to search on, for example "finance.yahoo.com"
 start, end: strings of the starting date and ending date of search queries, in the format YYYY-MM-DD
 
-The function uses google to search for every stock on every site on every day within the day range. It stores the links in a json called Searcher2JsonLinks.json.
-The function still picks up irrelevant links and also someitmes in different languages. Also gets HTTP Error 429: Too Many Requests error occasionally.
+The function uses google to search for every stock on every site in every 5 day range within the entire range. The remainder is also used as a range. It stores 
+the links in a json called Searcher2JsonLinks.json. The function still sometimes picks up irrelevant links and also someitmes in different languages. Also gets 
+HTTP Error 429: Too Many Requests error occasionally.
 """
 def getLinks(stocks, sites, start, end):
     try:
@@ -46,8 +46,9 @@ def googleSearch(query, nums):
 def generateDateArray(start, end):
     start_date = datetime.strptime(start, "%Y-%m-%d")
     end_date = datetime.strptime(end, "%Y-%m-%d")
-    D = 'D'
-    date_list = pd.date_range(start_date, end_date, freq=D)
+    date_list = pd.date_range(start_date, end_date, freq='5D')
+    if(date_list[-1].strftime("%Y-%m-%d") != end):
+        date_list = pd.to_datetime(date_list.tolist() + [end])
     return date_list.strftime("%Y-%m-%d")
 
 
