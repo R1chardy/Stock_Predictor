@@ -8,7 +8,7 @@ import pandas as pd
 Parameters:
 stocks: an array of strings of stocks
 sites: an array of strings of sites to search on, for example "finance.yahoo.com"
-start, end: starting date and ending date of search queries, in the format YYYY-MM-DD
+start, end: strings of the starting date and ending date of search queries, in the format YYYY-MM-DD
 
 The function uses google to search for every stock on every site on every day within the day range. It stores the links in a json called Searcher2JsonLinks.json.
 The function still picks up irrelevant links and also someitmes in different languages. Also gets HTTP Error 429: Too Many Requests error occasionally.
