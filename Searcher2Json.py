@@ -9,7 +9,7 @@ stocks: an array of strings of stocks
 sites: an array of strings of sites to search on, for example "finance.yahoo.com"
 start, end: strings of the starting date and ending date of search queries, in the format YYYY-MM-DD
 
-The function uses google to search for every stock on every site in every 5 day range within the entire range. The remainder is also used as a range. It stores 
+The function uses google to search for every stock on every site within every month range in the entire range. The remainder is also used as a range. It stores 
 the links in a json called Searcher2JsonLinks.json. The function still sometimes picks up irrelevant links and also someitmes in different languages. Also gets 
 HTTP Error 429: Too Many Requests error occasionally.
 """
@@ -46,16 +46,19 @@ def googleSearch(query, nums):
 def generateDateArray(start, end):
     start_date = datetime.strptime(start, "%Y-%m-%d")
     end_date = datetime.strptime(end, "%Y-%m-%d")
-    date_list = pd.date_range(start_date, end_date, freq='5D')
+    date_list = pd.date_range(start_date, end_date, freq='MS') + pd.Timedelta(str(int(start.split('-')[2])-1) + ' days')
+    if(date_list[0].strftime("%Y-%m-%d") != start):
+        date_list =  pd.to_datetime([start] + date_list.tolist())
     if(date_list[-1].strftime("%Y-%m-%d") != end):
-        date_list = pd.to_datetime(date_list.tolist() + [end])
+        date_list =  pd.to_datetime(date_list.tolist() + [end])
     return date_list.strftime("%Y-%m-%d")
 
 
 def main():
     stocks = ["tesla", "apple", "microsoft", "NVIDIA", "zoom", "blizzard", "google", "iqiyi", "cadence", "qualcomm", "uber"]
     sites = ["news.yahoo.com", "finance.yahoo.com"]
-    getLinks(stocks, sites, "2018-01-01", "2018-02-01")
+    getLinks(stocks, sites, "2018-01-11", "2018-08-25")
+    # print(generateDateArray("2018-01-10", "2018-08-10"))
 
 if __name__ == "__main__":
     main()
